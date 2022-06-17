@@ -12,6 +12,13 @@
         background: #f6f5f4;
         color: #1a1a1a;
         } */
+        .btn {
+            border-radius: 16px;
+            /* 枠線を消す */
+            border: none;
+            /* 上下4px、左右16px */
+            padding: 4px 16px;
+        }
     </style>
 </head>
 
@@ -32,7 +39,7 @@
             $selected_year = $_POST["year"];
             $selected_month = $_POST["month"];
         }
-
+    
         // prevボタンが押下された場合
         if (isset($_POST['prev_button'])){
             $button_flg = TRUE;
@@ -41,10 +48,10 @@
             // 1月の場合は、前年の12月にする
             if ($selected_month == 1){
                 $selected_month = 12;
-                $selected_year = --$selected_year;
+                --$selected_year;
             // 1月でない場合は単純に月から-1引く
             }else{
-                $selected_month = --$selected_month;
+                --$selected_month;
             }
         }
 
@@ -56,12 +63,14 @@
             // 12月の場合は、次年の1月にする
             if ($selected_month == 12){
                 $selected_month = 1;
-                $selected_year = ++$selected_year;
+                ++$selected_year;
+                
             // 12月でない場合は単純に月に1足す
             }else{
-                $selected_month = ++$selected_month;
+                ++$selected_month;
             }
         }
+
     ?>
 
     <!-- 年選択プルダウン -->
@@ -93,13 +102,25 @@
     </select>
 
     <!-- 選択ボタン -->
-    <input type="submit"name="select_button"value="選択"/>
+    <input type="submit" name="select_button" value="選択" class="btn"/>
 
+    <div>
     <!-- 前月へ移動するボタン -->
-    <input type="submit"name="prev_button"value="prev"/>
+    <?php
+        if ($selected_year == 1900 & $selected_month == 1 | $button_flg == FALSE){
+            // 1900年1月の場合および初期表示の場合は前月移動ボタンを表示しない
+        }else{
+            echo ('<input type="submit" name="prev_button" value="prev" class="btn"/>');
+        }
 
-    <!-- 次月へ移動するボタン -->
-    <input type="submit"name="next_button"value="next"/>
+        // 次月へ移動するボタン
+        if ($selected_year == 2022 & $selected_month == 12){
+            // 2022年12月の場合は次月移動ボタンを表示しない
+        }else{
+            echo ('<input type="submit" name="next_button" value="next" class="btn"/>');
+        }
+    ?>
+    </div>
 
 </form>
 
@@ -117,7 +138,7 @@
             <tr>
                 <?php
                     // ボタンが押下された場合
-                    if ($button_flg == TRUE){
+                    if ($button_flg){
 
                         // 参考にしたサイト：https://php1st.com/1001#0table
                         $day = 1;

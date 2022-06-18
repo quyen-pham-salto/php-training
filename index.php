@@ -26,23 +26,19 @@
 <form method="post">
 
     <?php
-        // ボタンが押されたかのフラグ
-        $button_flg = FALSE;
-        // 選択された年
-        $selected_year = null;
-        // 選択された月
-        $selected_month = null;
+        // 現在年
+        $selected_year = date("Y");
+        // 現在月
+        $selected_month = date("m");
 
         // 選択ボタンが押下された場合
         if (isset($_POST['select_button'])) {
-            $button_flg = TRUE;
             $selected_year = $_POST["year"];
             $selected_month = $_POST["month"];
         }
     
         // prevボタンが押下された場合
         if (isset($_POST['prev_button'])){
-            $button_flg = TRUE;
             $selected_year = $_POST["year"];
             $selected_month = $_POST["month"];
             // 1月の場合は、前年の12月にする
@@ -57,7 +53,6 @@
 
         // nextボタンが押下された場合
         if (isset($_POST['next_button'])){
-            $button_flg = TRUE;
             $selected_year = $_POST["year"];
             $selected_month = $_POST["month"];
             // 12月の場合は、次年の1月にする
@@ -107,8 +102,8 @@
     <div>
     <!-- 前月へ移動するボタン -->
     <?php
-        if ($selected_year == 1900 & $selected_month == 1 | $button_flg == FALSE){
-            // 1900年1月の場合および初期表示の場合は前月移動ボタンを表示しない
+        if ($selected_year == 1900 & $selected_month == 1){
+            // 1900年1月の場合は前月移動ボタンを表示しない
         }else{
             echo ('<input type="submit" name="prev_button" value="prev" class="btn"/>');
         }
@@ -137,29 +132,25 @@
             </tr>
             <tr>
                 <?php
-                    // ボタンが押下された場合
-                    if ($button_flg){
+					// 参考にしたサイト：https://php1st.com/1001#0table
+					$day = 1;
 
-                        // 参考にしたサイト：https://php1st.com/1001#0table
-                        $day = 1;
+					// 月初めの日の曜日を取得する
+					$wd1 = date("w", mktime(0, 0, 0, $selected_month, 1, $selected_year));
+					// 月初めの日まで空欄を表示させる
+					for ($i = 1; $i <= $wd1; $i++) {
+						echo "<td>　</td>";
+					}
 
-                        // 月初めの日の曜日を取得する
-                        $wd1 = date("w", mktime(0, 0, 0, $selected_month, 1, $selected_year));
-                        // 月初めの日まで空欄を表示させる
-                        for ($i = 1; $i <= $wd1; $i++) {
-                            echo "<td>　</td>";
-                        }
-
-                        // 日付が存在する間ループ
-                        while (checkdate($selected_month, $day, $selected_year)) {
-                            echo "<td>$day</td>";
-                            // 土曜日の場合は改行する
-                            if (date("w", mktime(0, 0, 0, $selected_month, $day, $selected_year)) == 6) {
-                                echo "</tr>";
-                            }
-                            $day++;
-                        }
-                    }
+					// 日付が存在する間ループ
+					while (checkdate($selected_month, $day, $selected_year)) {
+						echo "<td>$day</td>";
+						// 土曜日の場合は改行する
+						if (date("w", mktime(0, 0, 0, $selected_month, $day, $selected_year)) == 6) {
+							echo "</tr>";
+						}
+						$day++;
+					}
                 ?>
             </tr>    
         </table>

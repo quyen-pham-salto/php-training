@@ -1,0 +1,35 @@
+body {
+    font-size: 14px;
+}
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin: 60px auto;
+    width: 80%;
+}
+thead {
+    background: #eefcff;
+}
+tbody td {
+    border: 2px solid rgb(0, 0, 0);
+    position: relative;
+    height: 70px;
+    width: 70px;
+}
+tbody td:last-child,
+.blue {
+    color: blue;
+}
+tbody td:first-child,
+.red {
+    color: red;
+}
+tbody p {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+#title {
+    font-size: 30px;
+    height: 70px;
+}

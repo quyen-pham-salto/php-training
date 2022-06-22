@@ -1,3 +1,45 @@
+<?php
+    // 現在年
+    $selected_year = date("Y");
+    // 現在月
+    $selected_month = date("m");
+
+    // 選択ボタンが押下された場合
+    if (isset($_POST['select_button'])) {
+        $selected_year = $_POST["year"];
+        $selected_month = $_POST["month"];
+    }
+
+    // prevボタンが押下された場合
+    if (isset($_POST['prev_button'])){
+        $selected_year = $_POST["year"];
+        $selected_month = $_POST["month"];
+        // 1月の場合は、前年の12月にする
+        if ($selected_month == 1){
+            $selected_month = 12;
+            --$selected_year;
+        // 1月でない場合は月から1引く
+        }else{
+            --$selected_month;
+        }
+    }
+
+    // nextボタンが押下された場合
+    if (isset($_POST['next_button'])){
+        $selected_year = $_POST["year"];
+        $selected_month = $_POST["month"];
+        // 12月の場合は、次年の1月にする
+        if ($selected_month == 12){
+            $selected_month = 1;
+            ++$selected_year;
+            
+        // 12月でない場合は月に1足す
+        }else{
+            ++$selected_month;
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,13 +47,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHP_calendar_shinooka</title>
     <style>
-        /* .calendar-container {
-        width: 500px;
-        margin: 0 auto;
-        border-radius: 5px;
-        background: #f6f5f4;
-        color: #1a1a1a;
-        } */
         .btn {
             border-radius: 16px;
             /* 枠線を消す */
@@ -24,49 +59,6 @@
 
 <body>
 <form method="post">
-
-    <?php
-        // 現在年
-        $selected_year = date("Y");
-        // 現在月
-        $selected_month = date("m");
-
-        // 選択ボタンが押下された場合
-        if (isset($_POST['select_button'])) {
-            $selected_year = $_POST["year"];
-            $selected_month = $_POST["month"];
-        }
-    
-        // prevボタンが押下された場合
-        if (isset($_POST['prev_button'])){
-            $selected_year = $_POST["year"];
-            $selected_month = $_POST["month"];
-            // 1月の場合は、前年の12月にする
-            if ($selected_month == 1){
-                $selected_month = 12;
-                --$selected_year;
-            // 1月でない場合は単純に月から-1引く
-            }else{
-                --$selected_month;
-            }
-        }
-
-        // nextボタンが押下された場合
-        if (isset($_POST['next_button'])){
-            $selected_year = $_POST["year"];
-            $selected_month = $_POST["month"];
-            // 12月の場合は、次年の1月にする
-            if ($selected_month == 12){
-                $selected_month = 1;
-                ++$selected_year;
-                
-            // 12月でない場合は単純に月に1足す
-            }else{
-                ++$selected_month;
-            }
-        }
-
-    ?>
 
     <!-- 年選択プルダウン -->
     <select id="year" name="year">
@@ -102,23 +94,19 @@
     <div>
     <!-- 前月へ移動するボタン -->
     <?php
-        if ($selected_year == 1900 & $selected_month == 1){
-            // 1900年1月の場合は前月移動ボタンを表示しない
-        }else{
+        // 1900年1月以外の場合に前月移動ボタンを表示
+        if ($selected_year != 1900 | $selected_month != 1){
             echo ('<input type="submit" name="prev_button" value="prev" class="btn"/>');
         }
 
-        // 次月へ移動するボタン
-        if ($selected_year == 2022 & $selected_month == 12){
-            // 2022年12月の場合は次月移動ボタンを表示しない
-        }else{
+        // 2022年12月以外の場合に次月移動ボタンを表示
+        if ($selected_year != 2022 | $selected_month != 12){
             echo ('<input type="submit" name="next_button" value="next" class="btn"/>');
         }
     ?>
     </div>
 
 </form>
-
     <div class="calendar-container">
         <table>
             <tr>
@@ -139,7 +127,7 @@
 					$wd1 = date("w", mktime(0, 0, 0, $selected_month, 1, $selected_year));
 					// 月初めの日まで空欄を表示させる
 					for ($i = 1; $i <= $wd1; $i++) {
-						echo "<td>　</td>";
+						echo "<td>&emsp;</td>";
 					}
 
 					// 日付が存在する間ループ

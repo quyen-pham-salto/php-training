@@ -1,5 +1,46 @@
-# php-training
-* Implementation of calendar in PHP
-* Required function:
-    * Display the selected month and year calendar by preparing a pull-down menu for the month and year.
-    * Please make it selectable from January to December for the month and from 1900 to 2022 for the year.
+### 環境構築
+* Macの場合
+```
+brew install php@バージョン
+```
+
+```
+brew install composer
+```
+
+```
+cd php_training/
+```
+
+```
+composer install
+```
+
+```
+cp .env.example .env
+```
+
+```
+mysql -uroot
+mysql> CREATE DATABASE php_training;
+```
+
+```
+php artisan migrate
+```
+
+```
+php artisan serve
+```
+
+### ユーザーの作成方法
+
+```
+php artisan tinker
+
+>>> $user = new User();
+>>> $user->name = "username";
+>>> $user->email = "mail@example.com";
+>>> $user->password = Hash::make('password');
+>>> $user->save();
+```
